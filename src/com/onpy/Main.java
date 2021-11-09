@@ -1,25 +1,26 @@
-/*
-Создать класс треугольник, члены класса – длины 3-х сторон. Предусмотреть в классе методы
-вычисления и вывода сведений о фигуре – длины сторон, углы, периметр, площадь. Создать
-производный класс – равнобедренный треугольник, предусмотреть в классе проверку, является
-ли треугольник равнобедренным. Написать программу, демонстрирующую работу с классом:
-дано N треугольников и M равнобедренных треугольников, найти среднюю площадь для N
-треугольников и равнобедренный треугольник с наименьшей площадью.
-*/
-
 package com.onpy;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.*;
 import java.util.Scanner;
 
 import static java.lang.Math.pow;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static Results res = new Results();
+
+    public static int CheckCorrectFunction(String value) {
+        int func = -1;
+        try {
+            func = Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            func = -1;
+        }
+
+        return func;
+    }
+
+    public static void main(String[] args) throws IOException {
 
         Scanner scan = new Scanner(System.in);
         int inCountTriangle = 1;//scan.nextInt();
@@ -28,6 +29,7 @@ public class Main {
         triangle[] triangles = new triangle[inCountTriangle];
 
         int CountTriangle = 0;
+        int function = 0;
 
         for (int i = 0; i < triangles.length; i++) {
 
@@ -39,10 +41,6 @@ public class Main {
             triangles[i].x2 = scan.nextInt();
             System.out.print("Введите cторону Х3 для треугольника №" + (i + 1) + ": ");
             triangles[i].x3 = scan.nextInt();
-
-            //x1 = 1 + Math.random() * 10;
-            //x2 = 1 + Math.random() * 10;
-            //x3 = 1 + Math.random() * 10;
 
             triangles[i].numberTriangle = ++CountTriangle;
         }
@@ -106,53 +104,34 @@ public class Main {
         System.out.println("Средняя площадь треугольников = " + averageSquare);
         System.out.println("Минимальная площадь равнобедренного треугольника = " + min);
 
-        // Запись строковых данных в файл
-        long timeStart = System.currentTimeMillis();
-        String fileName4 = "D:\\file4laba.txt";
-        FileWriter fw;
-        BufferedWriter bw;
-        FileReader fr;
-        BufferedReader br;
-        // Строка, которая будет записана в файл
-        for (int i = 0; i < triangles.length; i++) {
-            String size1 = "Сторонa Х1 треугольника №" + (i+1) + ": " + triangles[i].x1 + "\n";
-            String size2 = "Сторонa Х2 треугольника №" + (i+1) + ": " + triangles[i].x2 + "\n";
-            String size3 = "Сторонa Х3 треугольника №" + (i+1) + ": " + triangles[i].x3 + "\n";
-            String size4 = "Периметр треугольника №" + (i+1) + ": " + triangles[i].perimeter + "\n";
-            String size5 = "Косинус угла Alpha треугольника №" + (i+1) + " = " + triangles[i].alpha + "\n";
-            String size6 = "Косинус угла Betta треугольника №" + (i+1) + " = " + triangles[i].betta + "\n";
-            String size7 = "Косинус угла Gamma треугольника №" + (i+1) + " = " + triangles[i].gamma + "\n";
-            String size8 = "Площадь треугольника №" + (i+1) + " = " + triangles[i].square + "\n";
-            try {
-                fw = new FileWriter(fileName4);
-                bw = new BufferedWriter(fw);
-                System.out.println("Write some data to file: " + fileName4);
-                // Несколько раз записать строку
-                for (int j = 1; --j >= 0; ) {
-                    bw.write(size1);
-                    bw.write(size2);
-                    bw.write(size3);
-                    bw.write(size4);
-                    bw.write(size5);
-                    bw.write(size6);
-                    bw.write(size7);
-                    bw.write(size8);
-                }
-                bw.close();
+        do {
+            System.out.println("\nСписок функций: ");
+            System.out.println("[1] - Сохранение в файл");
+            System.out.println("[2] - Загрузить из файла");
+            System.out.println("[3] - Загрузить резервную копию");
+            System.out.println("[4] - Выход из программы");
+            do {
+                System.out.print("Введите номер функции: ");
+                function = CheckCorrectFunction(scan.nextLine());
+            } while (function == -1);
 
-                fr = new FileReader(fileName4);
-                br = new BufferedReader(fr);
-                String s;
-                int count = 0;
-                System.out.println("Read  data from file: " + fileName4);
-                // Считывать данные, отображая на экран
-                while ((s = br.readLine()) != null) ;
-                // System.out.println("row  " + ++count + " read:" + s);
-                br.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-                System.out.println(System.currentTimeMillis() - timeStart);
+            switch (function) {
+                case 1:
+                    System.out.print("\nВведите путь для сохранения файл:");
+                    String saveFileName = scan.nextLine();
+                    res.saveFile(saveFileName);
+                    break;
+                case 2:
+                    System.out.print("\nВведите путь к базе данных:");
+                    String loadFileName = scan.nextLine();
+                    res.loadFile(loadFileName);
+                    break;
+                case 3:
+                    return;
+                default:
+                    System.out.println("\nТакой функции нету");
             }
-        }
+        } while (function != 0);
     }
+
 }

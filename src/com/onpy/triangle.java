@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class triangle {
     int numberTriangle;
-    double x1;
+    int x1;
     double x2;
     double x3;
     double perimeter;
@@ -21,7 +21,7 @@ public class triangle {
             Scanner scan = null;
             trueSide = scan.nextDouble();
         }
-        this.x1 = trueSide;
+        this.x1 = (int) trueSide;
     }
 
     public double getX1() {
